@@ -12,9 +12,11 @@
 
 ### 1. Robust Lookups & Cleansing
 - **XLOOKUP with TRIM:** Handled leading/trailing whitespaces in raw customer IDs that caused standard lookup failures.
-  excel
-  =XLOOKUP(TRIM(Lookup_Value), Lookup_Array, Return_Array, "Not Found")
+
+  excel = XLOOKUP(TRIM(Lookup_Value), Lookup_Array, Return_Array, "Not Found")
+  
   Two-Way Indexing: Used INDEX + MATCH for dynamic unordered lookups to avoid hardcoding column index numbers.
+  
 ###  2. Multi-Criteria Business Logic
 - **Nested Logical Overrides:** Built combined conditional statements using IF(OR(AND(...), AND(...))) to determine tiered discount eligibility based on customer segment and sales thresholds.
 ##  📊 Business Math & Statistical Insights
