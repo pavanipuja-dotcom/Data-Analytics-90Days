@@ -129,3 +129,58 @@ Calculated key conversion and cart abandonment figures after sanitizing raw tran
 
 ## 📂 Deliverables & File Index
 - `Day_03_Worksheet.xlsx`: Complete workbook containing text parsing and financial cleaning solutions.
+
+
+# Day 4: Power Query ETL, Data Ingestion & Structural Transformations
+
+## 📌 Daily Overview
+- **Focus Area:** Repeatable ETL Pipelines, M-Code Basics, Delimited Text Splitting, Column Unpivoting, Data Type Enforcement, and YoY Growth Metrics.
+- **Time Invested:** 10 Hours
+- **Core Objective:** Automate multi-file data ingestion and unpivot wide transactional data matrices into narrow, normalized tables loaded into the Excel Data Model.
+
+---
+
+## 🛠️ Power Query Transformation Steps & Mechanics
+
+| Transformation Step | M-Code Function / UI Tool | Purpose / Technical Outcome |
+| :--- | :--- | :--- |
+| **Delimited Split** | `Table.SplitColumn(..., Splitter.SplitTextByDelimiter("("))` | Separates complex composite strings (e.g., Customer Name and Location Code). |
+| **Text Sanitization** | `Text.Trim`, `Text.Proper`, `Text.Replace` | Strips whitespace, standardizes casing, and removes closing parentheses. |
+| **Unpivot Columns** | `Table.UnpivotOtherColumns(...)` | Converts wide multi-year columns (`Sales_2024`, `Sales_2025`, `Sales_2026`) into normalized attribute-value pairs. |
+| **Null Handling** | `Table.ReplaceValue(..., "null", "0", ...)` | Standardizes missing data or empty strings before numeric formatting. |
+| **Type Enforcement** | `Table.TransformColumnTypes(..., {{"Amount", Currency.Type}})` | Enforces strict schema typing prior to loading to the Data Model. |
+
+---
+
+## 💻 Complete Power Query M-Code Script (Block 2 Pipeline)
+powerquery
+let
+Source = Csv.Document(File.Contents("raw_regional_sales_b2.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+#"Split Manager" = Table.SplitColumn(#"Promoted Headers", "Region_Manager", Splitter.SplitTextByDelimiter(" (", QuoteStyle.Csv), {"Manager_Name", "Region"}),
+#"Cleaned Manager" = Table.TransformColumns(#"Split Manager", {{"Manager_Name", Text.Trim, type text}, {"Manager_Name", Text.Proper, type text}, {"Region", each Text.Replace(, ")", ""), type text}}),
+#"Unpivoted Years" = Table.UnpivotOtherColumns(#"Cleaned Manager", {"Store_ID", "Manager_Name", "Region", "Month_Year", "Category_Raw", "Status_Code"}, "Attribute", "Value"),
+#"Renamed Unpivoted" = Table.RenameColumns(#"Unpivoted Years",{{"Attribute", "Report_Year"}, {"Value", "Revenue_Amount"}}),
+#"Cleaned Year Code" = Table.TransformColumns(#"Renamed Unpivoted", {{"Report_Year", each Text.AfterDelimiter(, "_"), type text}}),
+#"Replaced Null Revenue" = Table.ReplaceValue(#"Cleaned Year Code","null","0",Replacer.ReplaceText,{"Revenue_Amount"}),
+#"Cleaned Currency Symbols" = Table.ReplaceValue(Table.ReplaceValue(#"Replaced Null Revenue","$","",Replacer.ReplaceText,{"Revenue_Amount"}),",","",Replacer.ReplaceText,{"Revenue_Amount"}),
+#"Enforced Types" = Table.TransformColumnTypes(#"Cleaned Currency Symbols",{{"Revenue_Amount", Currency.Type}, {"Report_Year", Int64.Type}})
+in
+#"Enforced Types"
+
+---
+
+## 📊 Revenue Growth Metrics (Block 3 Insights)
+
+Applied on transformed outputs loaded into Excel:
+
+- **Year-over-Year (YoY) Growth % (2025 vs 2026):**
+  $$\text{YoY Growth \%} = \frac{\text{Sales}_{2026} - \text{Sales}_{2025}}{\text{Sales}_{2025}}$$
+- **Compound Annual Growth Rate (CAGR, 2024 to 2026):**
+  $$\text{CAGR} = \left(\frac{\text{Sales}_{2026}}{\text{Sales}_{2024}}\right)^{\frac{1}{2}} - 1$$
+
+---
+
+## 📂 Deliverables & File Index
+- `Day_04_Worksheet.xlsx`: Complete Excel workbook with Power Query connection queries and data model tables.
+- `data/`: Raw CSV input files for order logs and regional sales matrices.
