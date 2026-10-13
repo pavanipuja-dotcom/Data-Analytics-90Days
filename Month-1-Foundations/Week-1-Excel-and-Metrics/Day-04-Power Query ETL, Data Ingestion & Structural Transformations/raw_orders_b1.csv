@@ -1,0 +1,6 @@
+Order_ID,Customer_Detail,Order_Date_Raw,Item_Category,Gross_Price_USD,Discount_Raw,Store_Status
+ORD-1001_2026,  John Doe (NYC)  ,01-10-2026,ELE-Laptops,"$1,200.00",10%,ACT_01
+ORD-1002_2026,MARIA GARCIA (MIA),01-10-2026,CLO-Apparel,$85.50,5%,ACT_01
+ORD-1003_2026,  david lee (CHI)  ,02-10-2026,HOME-Furniture,$450.00,null,PEND_02
+ORD-1004_2026,Sarah Parker (LA),02-10-2026,ELE-Tablets,$310.00,0%,ACT_01
+ORD-1005_2026,  Bob Johnson (NYC)  ,03-10-2026,CLO-Footwear,$120.00,null,CAN_03

@@ -1,0 +1,6 @@
+Store_ID,Region_Manager,Month_Year,Category_Raw,Sales_2024,Sales_2025,Sales_2026,Status_Code
+STR-501,  John Doe (North)  ,2026-07,ELE-Laptops,"$15,000","$18,500","$22,000",ACT_01
+STR-502,MARIA GARCIA (SOUTH),2026-07,CLO-Apparel,"$8,200","$9,100","$11,500",ACT_01
+STR-503,  David Lee (East)  ,2026-08,HOME-Furniture,"$12,400",null,"$14,100",PEND_02
+STR-504,Sarah Parker (West),2026-08,ELE-Tablets,"$6,500","$7,200","$8,900",ACT_01
+STR-505,  Bob Johnson (North)  ,2026-09,CLO-Footwear,"$4,100","$4,800",null,CAN_03
