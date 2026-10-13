@@ -95,3 +95,37 @@ Modeled key subscription performance drivers across 12 account logs:
 - `Day_02_Worksheet.xlsx`: Workbook containing Task 1–5 solutions (both dynamic array and legacy CSE implementations).
 
 
+# Day 3: Text Manipulation, Unstructured String Sanitization & E-Commerce Metrics
+
+## 📌 Daily Overview
+- **Focus Area:** Classic String Parsing (`LEFT`, `RIGHT`, `MID`, `FIND`, `SEARCH`, `SUBSTITUTE`, `TRIM`, `LEN`) for Excel 2016.
+- **Time Invested:** 10 Hours
+- **Core Objective:** Clean messy customer system logs, parse delimited SKUs and email domains, and compute clean conversion metrics from unformatted transactional text.
+
+---
+
+## 🛠️ Text Formula Reference Sheet (Excel 2016 Syntax)
+
+| Parsing Objective | Formula Combination | Purpose / Notes |
+| :--- | :--- | :--- |
+| **Clean Whitespace** | `=TRIM(B2)` | Removes leading, trailing, and duplicate mid-string spaces. |
+| **Extract Email User** | `=LEFT(C2, FIND(" ", C2) - 1)` | Extracts text prior to space/bracket delimiters. |
+| **Extract Email Domain** | `=MID(G2, FIND("@", G2) + 1, LEN(G2) - FIND("@", G2))` | Dynamically extracts domain after `@` symbol. |
+| **Parse Delimited Substring** | `=MID(D2, 5, 3)` | Extracts fixed-width internal codes (e.g., Category). |
+| **Replace Characters** | `=SUBSTITUTE(SUBSTITUTE(E2, " / ", "-"), " ", "")` | Normalizes delimiters and strips illegal characters. |
+| **Clean Currency Strings** | `=VALUE(SUBSTITUTE(SUBSTITUTE(C2, "$", ""), " USD", ""))` | Converts formatted text numbers (`"$1,250.00 USD"`) into raw integers. |
+
+---
+
+## 📊 E-Commerce Performance Metrics (Block 3 Insights)
+
+Calculated key conversion and cart abandonment figures after sanitizing raw transaction streams:
+
+- **Average Order Value (AOV):** Computed for all converted sales using `=AVERAGEIF(Status, "Converted", Clean_Numeric_Value)`.
+- **Enterprise Conversion Rate:** Computed using `=COUNTIFS(Segment, "Enterprise_Tier", Status, "Converted") / COUNTIF(Segment, "Enterprise_Tier")`.
+- **Abandoned Revenue Loss:** Measured total cart loss across unfulfilled sessions via `=SUMIF(Status, "Abandoned", Clean_Numeric_Value)`.
+
+---
+
+## 📂 Deliverables & File Index
+- `Day_03_Worksheet.xlsx`: Complete workbook containing text parsing and financial cleaning solutions.
