@@ -184,3 +184,60 @@ Applied on transformed outputs loaded into Excel:
 ## 📂 Deliverables & File Index
 - `Day_04_Worksheet.xlsx`: Complete Excel workbook with Power Query connection queries and data model tables.
 - `data/`: Raw CSV input files for order logs and regional sales matrices.
+
+
+# Day 5: Pivot Tables, Data Modeling & Customer Retention Analytics
+
+## 📌 Daily Overview
+- **Focus Area:** Pivot Cache Optimization, Star Schema Data Modeling (Fact vs. Dimensions), Multi-Table Relationships, DAX Measures, and Cohort Churn Modeling.
+- **Time Invested:** 10 Hours
+- **Core Objective:** Build a relational Star Schema model inside the Excel Data Model (Power Pivot) without traditional VLOOKUP formulas, construct cross-filtering slicer controls, and analyze customer churn and margin dynamics.
+
+---
+
+## 📐 Star Schema Architecture & Relationships
+
+2.Write Technical Documentation:README.md Setup.Create a README.md file inside Month-01-Foundations/01-Excel-and-Business-Math/Day-05-Pivot-Tables-and-Data-Modeling/. Copy and populate the template below:Markdown# Day 5: Pivot Tables, Data Modeling & Customer Retention Analytics
+
+## 📌 Daily Overview
+- **Focus Area:** Pivot Cache Optimization, Star Schema Data Modeling (Fact vs. Dimensions), Multi-Table Relationships, DAX Measures, and Cohort Churn Modeling.
+- **Time Invested:** 10 Hours
+- **Core Objective:** Build a relational Star Schema model inside the Excel Data Model (Power Pivot) without traditional VLOOKUP formulas, construct cross-filtering slicer controls, and analyze customer churn and margin dynamics.
+
+---
+
+## 📐 Star Schema Architecture & Relationships
+
+text[Dim_Customers]                  [Dim_Products]Customer_ID (PK) ──┐        ┌── Product_ID (PK)│        │▼        ▼[Fact_Orders]Customer_ID (FK)Product_ID (FK)Sales_Amount
+
+- **`Fact_Orders[Customer_ID]` $\rightarrow$ `Dim_Customers[Customer_ID]`** (Many-to-One)
+- **`Fact_Orders[Product_ID]` $\rightarrow$ `Dim_Products[Product_ID]`** (Many-to-One)
+
+---
+
+## 🛠️ Data Model Measures & DAX Expressions
+
+| Calculation Name | Code / Expression | Purpose |
+| :--- | :--- | :--- |
+| **`Total_Cost` (Column)** | `= Fact_Orders[Units_Sold] * RELATED(Dim_Products[Unit_Cost])` | Calculated column fetching unit cost across relationships. |
+| **`Gross_Margin` (Column)** | `= Fact_Orders[Sales_Amount] - Fact_Orders[Total_Cost]` | Determines net transaction margin. |
+| **`Active_July_Customers`** | `CALCULATE(DISTINCTCOUNT(Fact_Orders[Customer_ID]), FILTER(Fact_Orders, MONTH(Fact_Orders[Order_Date]) = 7))` | Counts unique active July buyers (`2`). |
+| **`Retained_August_Customers`** | `CALCULATETABLE(...)` / `INTERSECT(...)` | Measures July buyers who returned in August (`1`). |
+| **`August_Churn_Rate`** | `= (July_Active - August_Retained) / July_Active` | Calculates monthly customer churn rate (**`50.00%`**). |
+
+---
+
+## 📊 Regional Performance & Financial Summary
+
+| Region | Total Revenue | Unit Cost | Gross Profit |
+| :--- | :--- | :--- | :--- |
+| **North** | `$2,390` | `$900` | **`$1,490`** |
+| **South** | `$1,650` | `$300` | **`$1,350`** |
+| **East** | `$1,500` | `$450` | **`$1,050`** |
+| **West** | `$1,800` | `$400` | **`$1,400`** |
+
+---
+
+## 📂 Deliverables & File Index
+- `Day_05_Worksheet.xlsx`: Complete workbook with Power Pivot Star Schema model, DAX measures, and interactive Slicers.
+- `data/`: Raw CSV files for `Fact_Orders`, `Dim_Customers`, and `Dim_Products`.
